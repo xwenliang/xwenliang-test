@@ -1,0 +1,19 @@
+@import '../../../css/font/font-awesome.min.css';
+@import '../../../vendor/simplemde/simplemde.min.css';
+@import '../../../vendor/prismjs/prism.css';
+
+.editor-toolbar a{
+    outline: none;
+    &:hover{
+        border-color: transparent;
+    }
+    &.active{
+        border-color: #48a623;
+    }
+    &.active::before{
+        color: #48a623;
+    }
+    &.active:hover{
+        border-color: #48a623;
+    }
+}

@@ -1,0 +1,226 @@
+/*
+ * Globle Css Document
+ * @ Author: zooble
+ * @ Email: wenliang.web@gmail.com
+ * @ Date: 2013-5-6
+ */
+@charset 'utf-8';
+@import './font/fonts.css';
+
+@color-bg: #f9f9f9;
+@color-font: #333;
+@color-font-tit: #48a623;
+@color-font-sub: #999;
+@color-link: #48a623;
+
+html{
+    min-height: 100%;
+    overflow-y: scroll;
+}
+body{
+    position: relative;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    background: url(../images/bg.png) repeat;
+    background-size: 200px 200px;
+    color: #484848;
+    text-shadow: 0.1px 0.1px 0.1px #ddd;
+    line-height: 1.8;
+}
+p,ol,ul,li,dt,dd,dl,pre,form,fieldset,input,textarea,blockquote,em,i,b,hr,h1,h2,h3,h4,h5,h6{
+    margin: 0;
+    padding: 0;
+    font-style: normal;
+    font-weight: normal;
+}
+h1,h2{
+    font-weight: bold;
+}
+ol,ul{
+    list-style: none;
+}
+select,div{
+    outline: medium;
+}
+input,button,a,select{
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    outline: medium;
+    text-decoration: none;
+    color: @color-font;
+}
+button,a{
+    cursor: pointer;
+}
+a:hover{
+    color: @color-link;
+}
+input,
+select{
+    border: 1px solid #dadada;
+    padding: 0 5px;
+    height: 24px;
+    line-height: 24px;
+    font-size: 14px;
+}
+img{
+    vertical-align: top;
+    border: none;
+}
+
+.fix{
+    zoom: 1;
+    &::after{
+        content: ' ';
+        font-size: 0;
+        line-height: 0;
+        height: 0;
+        visibility: hidden;
+        display: block;
+        clear: both;
+    }
+}
+.hide{
+    display: none;
+}
+//公共按钮
+.gray,
+.green{
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    border-radius: 3px;
+    border: 1px solid #dadada;
+    padding: 2px 8px;
+}
+.gray{
+    background: #efefef;
+    color: @color-font;
+    &:hover{
+        background: #e6e6e6;
+        color: @color-link;
+    }
+}
+.green{
+    background: #55b131;
+    border-color: #469129;
+    color: #fff;
+    &:hover{
+        background: #48a623;
+        color: #fff;
+    }
+}
+.ib-wrap{
+    font-size: 0;
+    >span,
+    >em,
+    >a{
+        display: inline-block;
+        vertical-align: top;
+        letter-spacing: normal;
+        word-spacing: normal;
+        font-size: 14px;
+        color: @color-font-sub;
+    }
+    >a:hover{
+        color: @color-link;
+    }
+    .green{
+        background: #55b131;
+        border-color: #469129;
+        color: #fff;
+        &:hover{
+            background: #48a623;
+            color: #fff;
+        }
+    }
+}
+.wrap{
+    width: 1000px;
+    margin: 0 auto;
+}
+.box{
+    padding: 5px 10px;
+    background: rgba(251, 251, 251, 0.5);
+    border: 1px solid #fff;
+    box-shadow: 0 0 10px #dfdfdf;
+}
+
+@media screen and (max-width: 1000px){
+    *{
+        outline: none;
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        -webkit-focus-ring-color: rgba(0,0,0,0);
+    }
+    body{
+        .wrapper>div{
+            overflow-y: initial;
+        }
+        .wrap{
+            width: 100%;
+        }
+        .logo{
+            margin-left: 10px;
+        }
+        .box-foot-date{
+            height: 16px;
+            overflow: hidden;
+        }
+        .page-index{
+            .artical{
+                width: 100%;
+                .item{
+                    .title{
+                        max-width: 220px;
+                    }
+                }
+            }
+            .right{
+                display: none;
+            }
+        }
+        .page-post{
+            .user-i{
+                display: none;
+            }
+            .post-wrap{
+                padding-left: 10px;
+                padding-right: 10px;
+
+            }
+            .post-footer{
+                min-width: 100%;
+            }
+            .footer-content{
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            .post-comment .c-input textarea{
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .like-wrap{
+                display: flex;
+            }
+            .btn-wrap{
+                flex: 1;
+            }
+            .liked-ul-wrap{
+                overflow: visible;
+                position: initial;
+                width: initial;
+                margin-top: 2px;
+                flex: 3.5;
+            }
+            .liked-ul{
+                position: initial;
+            }
+        }
+    }
+    
+}
+
+

@@ -1,0 +1,59 @@
+@import '../../../css/common.less';
+.item{
+    position: relative;
+    margin-bottom: 15px;
+    line-height: 24px;
+    text-align: left;
+    word-break: break-all;
+    .title{
+        max-width: 520px;
+        padding-bottom: 5px;
+        a{
+            display: inline-block;
+            vertical-align: middle;
+            max-width: 100%;
+            overflow: hidden;
+            font-weight: bold;
+            white-space: nowrap;
+            font-size: 16px;
+            text-overflow: ellipsis;
+        }
+    }
+    .date{
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        color: @color-font-sub;
+        font-size: 12px;
+        cursor: default;
+    }
+    .cont{
+        font-size: 14px;
+    }
+    .box-foot{
+        margin-top: 5px;
+        line-height: 1.2;
+        span{
+            margin-right: 10px;
+            margin-top: 4px;
+            font-size: 12px;
+            line-height: 1.2;
+            cursor: default;
+        }
+        span:hover{
+            color: #48a623;
+        }
+        a{
+            margin-right: 10px;
+            padding: 3px;
+            border: 1px solid #48a623;
+            border-radius: 3px;
+            font-size: 12px;
+            line-height: 1.2;
+            color: #48a623;
+        }
+        a:hover{
+            background: #e5f8de;
+        }
+    }
+}
