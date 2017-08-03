@@ -38,6 +38,7 @@
     "html-webpack-plugin": "^2.26.0",
     "less": "^2.7.2",
     "less-loader": "^4.0.4",
+    "optimize-css-assets-webpack-plugin": "^3.0.0",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "webpack": "^2.6.0",

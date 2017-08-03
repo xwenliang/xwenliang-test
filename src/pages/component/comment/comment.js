@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from '../../../vendor/jquery/jquery';
+import '../../../css/common.less';
 import './comment.less';
 
 class Item extends React.Component{

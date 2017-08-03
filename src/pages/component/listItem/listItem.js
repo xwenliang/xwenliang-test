@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import '../../../css/common.less';
 import './listItem.less';
 
 export default class ListItem extends React.Component{

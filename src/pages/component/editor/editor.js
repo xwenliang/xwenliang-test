@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import SimpleMDE from '../../../vendor/simplemde/simplemde.min';
 import Prism from '../../../vendor/prismjs/prism';
+import '../../../css/font/font-awesome.min.css';
+import '../../../vendor/simplemde/simplemde.min.css';
+import '../../../vendor/prismjs/prism.css';
 import './editor.less';
 
 /* https://github.com/NextStepWebs/simplemde-markdown-editor

@@ -1,4 +1,5 @@
 import React from 'react';
+import '../../../css/common.less';
 import './head.less';
 
 export default class Head extends React.Component{

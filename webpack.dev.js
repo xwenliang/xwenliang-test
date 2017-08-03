@@ -6,6 +6,8 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+
 const args = process.argv;
 const path = require('path');
 
@@ -26,7 +28,7 @@ let htmlPluginArr = pages.map(page => {
         inject: 'body',
         template: `./src/pages/${page}/${page}.html`,
         // inject modules from entry's key
-        chunks: ['manifest', 'vendor', page],
+        chunks: ['manifest', 'common', page],
         filename: `./${page}.html`,
         path: path.join(__dirname, 'build')
     });
@@ -34,13 +36,7 @@ let htmlPluginArr = pages.map(page => {
 
 let config = {
     entry: {
-        ...entry,
-        vendor: [
-            './src/vendor/jquery/jquery',
-            'react',
-            'react-dom',
-            './src/css/common.less'
-        ]
+        ...entry
     },
     // ensure entry files hash not to change when delete or add entry files
     //recordsPath: 'webpack.records.json',
@@ -82,6 +78,7 @@ let config = {
             {
                 test: /\.(css|less)$/,
                 exclude: /node_modules/,
+                //It doesn't work with Hot Module Replacement by design
                 use: ExtractTextPlugin.extract({
                     fallback: 'style-loader',
                     use: [
@@ -148,10 +145,15 @@ let config = {
         // }),
 
         // extract common codes
-        new webpack.optimize.CommonsChunkPlugin({
-            // point the output file, from entry's key
-            names: ['vendor', 'manifest']
-        }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     // point the output file, from entry's key
+        //     names: ['vendor', 'manifest']
+        // }),
+        // new webpack.optimize.CommonsChunkPlugin({
+        //     name: 'vendor',
+        //     filename: '[name].js',
+        //     chunks: [...pages, 'vendor']
+        // }),
 
         // auto inject js / css ..
         // new HtmlWebpackPlugin({
@@ -163,15 +165,38 @@ let config = {
         //     //这货有坑，不会使用上面url-loader生成的带md5的ico，会自己在根目录重新生成一个来引用
         //     //favicon: './src/images/fa.ico',
         //     path: path.join(__dirname, 'build')
-        // }),
-
-        ...htmlPluginArr,
+        // })
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'common',
+            filename: 'common.js',
+            chunks: pages,//If omitted all entry chunks are selected
+            minChunks: function(module){
+                console.log('---------', module.context.indexOf('src/css'));
+                let context = module.context;
+                if(typeof context !== 'string'){
+                    return false;
+                }
+                return context.indexOf('node_modules') > -1 || context.indexOf('src/vendor') > -1 || context.indexOf('src/css') > -1;
+            }
+        }),
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            chunks: ['common']
+        }),
 
         new ExtractTextPlugin({
             // but the hash was js's....(use contenthash instead chunkhash will avoid this problem)
             filename: '[name].css',
             allChunks: true
         }),
+
+        // new OptimizeCSSPlugin({
+        //     cssProcessorOptions: {
+        //         safe: true
+        //     }
+        // }),
+
+        ...htmlPluginArr
 
         //new webpack.optimize.UglifyJsPlugin()
     ]

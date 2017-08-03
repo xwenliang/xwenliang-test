@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import '../../css/common.less';
 import './newpost.less';
 import $ from '../../vendor/jquery/jquery';
 import Head from '../component/head/head';
