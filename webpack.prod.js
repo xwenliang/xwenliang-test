@@ -1,18 +1,20 @@
-import webpack from 'webpack';
-import WebpackDevServer from 'webpack-dev-server';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
-import path from 'path';
+const webpack = require('webpack');
 
-import ReactDOMServer from 'react-dom/server';
-import Index from './src/pages/index/index.server';
-//import React from 'react';
-console.log(ReactDOMServer.renderToString(<Index/>));
+const WebpackDevServer = require('webpack-dev-server');
+
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+
+const args = process.argv;
+const path = require('path');
+
 
 let pages = [
     'index',
     'login',
-    'reg',
     'newpost'
 ];
 
@@ -25,8 +27,10 @@ let htmlPluginArr = pages.map(page => {
     return new HtmlWebpackPlugin({
         inject: 'body',
         template: `./src/pages/${page}/${page}.html`,
-        chunks: ['common', page],
-        filename: `/Users/zooble/Documents/case/xwenliang.cn/5/app/view/${page}.html`
+        // inject modules from entry's key
+        chunks: ['manifest', 'common', page],
+        filename: `./${page}.html`,
+        path: path.join(__dirname, 'build')
     });
 });
 
@@ -37,11 +41,11 @@ let config = {
     // ensure entry files hash not to change when delete or add entry files
     //recordsPath: 'webpack.records.json',
     output: {
-        filename: '[name].js',
-        chunkFilename: '[name].js',
-        path: '/Users/zooble/Documents/case/xwenliang.cn/5/static',
-        publicPath: '/static'
+        filename: '[name]_[chunkhash:5].js',
+        chunkFilename: '[name]_[chunkhash:5].js',
+        path: path.join(__dirname, 'build')
     },
+    watch: true,
     module: {
         rules: [
             // js
@@ -66,7 +70,7 @@ let config = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: '/images/[name].[ext]'
+                            name: './images/[name]_[hash:5].[ext]'
                         }
                     }
                 ]
@@ -75,23 +79,25 @@ let config = {
             {
                 test: /\.(css|less)$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1
+                //It doesn't work with Hot Module Replacement by design
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                //the number 1, just set this value to true
+                                importLoaders: 1
+                            }
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                noIeCompat: true
+                            }
                         }
-                    },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            noIeCompat: true
-                        }
-                    }
-                ]
+                    ]
+                })
             },
             //favicon
             {
@@ -119,15 +125,22 @@ let config = {
                 loader: 'url-loader',
                 options: {
                     limit: 10,//B
-                    name: '/images/[name].[ext]'
+                    name: './images/[name]_[hash:5].[ext]'
                 }
             }
         ]
     },
     plugins: [
+        // my plugin
+        //new WebpackFtpDeploy(),
+        // use hashedModuleId
+        new webpack.HashedModuleIdsPlugin({
+            hashDigestLength: 10
+        }),
+
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
-            filename: '[name].js',
+            filename: '[name]_[chunkhash:5].js',
             chunks: pages,//If omitted all entry chunks are selecHotModuleReplacementPluginted
             minChunks: function(module){
                 let context = module.context;
@@ -138,18 +151,39 @@ let config = {
             }
         }),
 
-        ...htmlPluginArr
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'manifest',
+            chunks: ['common']
+        }),
+
+        new ExtractTextPlugin({
+            // but the hash was js's....(use contenthash instead chunkhash will avoid this problem)
+            filename: '[name]_[contenthash:5].css',
+            allChunks: true
+        }),
+
+        ...htmlPluginArr,
+
+        new webpack.optimize.UglifyJsPlugin(),
+        new OptimizeCSSPlugin({
+            cssProcessorOptions: {
+                safe: true
+            }
+        })
     ]
 };
 
 
 let compiler = webpack(config);
 compiler.apply(new webpack.ProgressPlugin());
-compiler.watch({
-    aggregateTimeout: 1000,
-    ignored: /node_modules/,
-    poll: 1000
-}, (err, stats) => {
-    console.log(stats);
+compiler.run(function(err, stats){
+    //console.log(err, stats);
 });
 
+compiler.apply(new webpack.ProgressPlugin(function(percentage, msg) {
+  //console.log((percentage * 100) + '%');
+}));
+
+
+
+module.exports = config;

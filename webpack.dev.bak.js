@@ -2,37 +2,46 @@ const webpack = require('webpack');
 
 const WebpackDevServer = require('webpack-dev-server');
 
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 
 const args = process.argv;
 const path = require('path');
 
 
-const config = {
+let pages = [
+    'index',
+    'login',
+    'reg',
+    'newpost'
+];
+
+let entry = {};
+pages.forEach(page => {
+    entry[page] = `./src/pages/${page}/${page}`;
+});
+
+let htmlPluginArr = pages.map(page => {
+    return new HtmlWebpackPlugin({
+        inject: 'body',
+        template: `./src/pages/${page}/${page}.html`,
+        chunks: ['common', page],
+        filename: `./${page}.html`,
+        path: path.join(__dirname, 'build')
+    });
+});
+
+let config = {
     entry: {
-        main: './src/pages/main',
-        index: './src/pages/index/index',
-        newpost: './src/pages/newpost/newpost',
-        login: './src/pages/login/login',
-        common: [
-            './vendor/jquery/jquery',
-            'lodash',
-            'react',
-            'react-dom'
-        ]
-        // common: [
-        //     './src/vendor/vendor1.css',
-        //     './src/vendor/vendor2.css',
-        //     './src/vendor/vendor3.css',
-        // ]
+        ...entry,
+
     },
     // ensure entry files hash not to change when delete or add entry files
     //recordsPath: 'webpack.records.json',
     output: {
-        filename: '[name]_[chunkhash:10].js',
-        chunkFilename: '[name]_[chunkhash:10].js',
+        filename: '[name].js',
+        chunkFilename: '[name].js',
         path: path.join(__dirname, 'build')
     },
     module: {
@@ -57,7 +66,10 @@ const config = {
                 test: /\.(eot|svg|ttf|woff|woff2)$/,
                 use: [
                     {
-                        loader: 'file-loader'
+                        loader: 'file-loader',
+                        options: {
+                            name: './images/[name].[ext]'
+                        }
                     }
                 ]
             },
@@ -109,84 +121,27 @@ const config = {
                 loader: 'url-loader',
                 options: {
                     limit: 10,//B
-                    name: './images/[name]_[hash:10].[ext]'
+                    name: './images/[name].[ext]'
                 }
             }
-            // images
-            // {
-            //     test: /\.(jpg|png)$/,
-            //     loader: 'file-loader',
-            //     options: {
-            //         name: '[name]_[hash:10].[ext]'
-            //     }
-            // }
         ]
     },
     plugins: [
-        // my plugin
-        //new WebpackFtpDeploy(),
-        // use hashedModuleId
-        new webpack.HashedModuleIdsPlugin({
-            hashDigestLength: 10
-        }),
 
-        // use file path as moduleId
-        // new webpack.NamedModulesPlugin({
-        //     //hashDigestLength: 10
-        // }),
-
-        // extract common codes
         new webpack.optimize.CommonsChunkPlugin({
-            // point the output file, from entry's key
-            names: ['common', 'manifest']
+            name: 'common',
+            filename: '[name].js',
+            chunks: pages,//If omitted all entry chunks are selecHotModuleReplacementPluginted
+            minChunks: function(module){
+                let context = module.context;
+                if(typeof context !== 'string'){
+                    return false;
+                }
+                return context.indexOf('node_modules') > -1 || context.indexOf('src/vendor') > -1 || context.indexOf('src/css') > -1;
+            }
         }),
 
-        // auto inject js / css ..
-        new HtmlWebpackPlugin({
-            inject: 'body',
-            template: './src/pages/main.html',
-            // inject modules from entry's key
-            chunks: ['manifest', 'common', 'main'],
-            filename: './main.html',
-            //这货有坑，不会使用上面url-loader生成的带md5的ico，会自己在根目录重新生成一个来引用
-            //favicon: './src/images/fa.ico',
-            path: path.join(__dirname, 'build')
-        }),
-
-        new HtmlWebpackPlugin({
-            inject: 'body',
-            template: './src/pages/index/index.html',
-            // inject modules from entry's key
-            chunks: ['manifest', 'common', 'index'],
-            filename: './index.html',
-            path: path.join(__dirname, 'build')
-        }),
-
-        new HtmlWebpackPlugin({
-            inject: 'body',
-            template: './src/pages/newpost/newpost.html',
-            // inject modules from entry's key
-            chunks: ['manifest', 'common', 'newpost'],
-            filename: './newpost.html',
-            path: path.join(__dirname, 'build')
-        }),
-
-        new HtmlWebpackPlugin({
-            inject: 'body',
-            template: './src/pages/login/login.html',
-            // inject modules from entry's key
-            chunks: ['manifest', 'common', 'login'],
-            filename: './login.html',
-            path: path.join(__dirname, 'build')
-        }),
-
-        new ExtractTextPlugin({
-            // but the hash was js's....(use contenthash instead chunkhash will avoid this problem)
-            filename: '[name]_[contenthash:10].less',
-            allChunks: true
-        }),
-
-        //new webpack.optimize.UglifyJsPlugin()
+        ...htmlPluginArr
     ]
     // use webpack-dev-server command will use this config
     // devServer: {
@@ -196,12 +151,6 @@ const config = {
     // }
 };
 
-// if (args.join('').indexOf('-dev') === -1 ){
-//     config.plugins = [
-//         new webpack.optimize.UglifyJsPlugin()
-//     ];
-// }
-
 
 let compiler = webpack(config);
 compiler.apply(new webpack.ProgressPlugin());
@@ -210,25 +159,47 @@ compiler.run(function(err, stats){
 });
 
 compiler.apply(new webpack.ProgressPlugin(function(percentage, msg) {
-  console.log((percentage * 100) + '%', msg);
+  //console.log((percentage * 100) + '%');
 }));
-
 
 
 let server = new WebpackDevServer(compiler, {
     contentBase: path.join(__dirname, 'build'),
     compress: true,
-    hot: true,
-    inline: true,
     stats: { colors: true },
     setup: function(app){
         app.get('/new', function(req, res){
             res.json({'abc': 123})
         });
+        app.get('/getCategory', function(req, res){
+            res.json({
+                code: 1,
+                msg: 'ok',
+                data: [
+                    'Javascript',
+                    'Nodejs',
+                    'Python',
+                    'PHP',
+                    'Java',
+                    'Html',
+                    'Android',
+                    'iOS',
+                    '心路历程',
+                    '杂谈随想'
+                ]
+            });
+        });
+    },
+    proxy: {
+        '**': {
+            target: 'http://xwenliang.cn',
+            changeOrigin: true,
+            secure: false
+        }
     }
 });
 
-server.listen(9000);
+server.listen(9000/*, '172.16.32.218'*/);
 
 
 module.exports = config;
