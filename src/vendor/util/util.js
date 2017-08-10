@@ -1,3 +1,37 @@
+import axios from 'axios';
+import qs from 'qs';
+
+function ajax(params){
+    if(!params || !params.url){
+        return console.log('ajax参数有误');
+    }
+    let opt = {
+        type: 'get',
+        dataType: 'json',
+        timeout: 10000,
+        ...params
+    };
+    let dataString = qs.stringify(opt.data);
+    return axios({
+        url: opt.type === 'post' ? opt.url : `${opt.url}?${dataString}`,
+        method: opt.type,
+        responseType: opt.responseType,
+        timeout: opt.timeout,
+        headers: opt.type === 'post' ? {
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        } : {},
+        data: dataString
+    });
+};
+
+function trim(str){
+    return str.replace(/(^\s*)|(\s*$)/g, '');
+};
+
+function strLen(str){
+    return Math.round(str.replace(/[\u0100-\uFFFF]/ig, 'ab').length/2);
+};
+
 function getCookie(key){
     let cookie = document.cookie;
     let cookieArr = cookie.split('; ');
@@ -23,6 +57,9 @@ function setCookie(key, val, expiredays){
 };
 
 export {
+    ajax,
+    trim,
+    strLen,
     getCookie,
     setCookie
 }

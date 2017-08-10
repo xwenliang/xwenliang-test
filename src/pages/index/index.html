@@ -9,8 +9,10 @@
     <meta name="author" content="zooble,wenliang.web@gmail.com">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
+<script>
+    var articalList = <%- JSON.stringify(articalList) %>;
+</script>
 <body>
-    <div id="index"></div>
-    <a href="http://www.onlinewebfonts.com">oNline Web Fonts</a>
+    <div id="index"><%- indexComponent %></div>
 </body>
 </html>

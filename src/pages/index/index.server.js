@@ -1,11 +1,19 @@
 import React from 'react';
+import axios from 'axios';
+import Head from '../component/head/head.server';
+import ListItem from '../component/listItem/listItem.server';
+import Comment from '../component/comment/comment.server';
+import {
+    apis,
+    routers
+} from '../main';
 
 export default class Index extends React.Component{
     constructor(props){
         super(props);
         this.state = {
             date: new Date(),
-            articalList: [],
+            articalList: typeof window === 'undefined' ? [] : window.articalList,
             commentList: [],
             ...props
         };
@@ -45,26 +53,26 @@ export default class Index extends React.Component{
 
     componentDidMount(){
         //列表数据
-        // $.ajax({
+        // axios({
         //     url: apis.getPosts,
-        //     type: 'get'
+        //     method: 'get'
         // }).then(res => {
         //     this.setState({
-        //         articalList: res.data.posts
+        //         articalList: res.data.data.posts
         //     });
         // });
         // //首页灌水数据
-        // $.ajax({
-        //     url: apis.getWater,
-        //     type: 'get',
-        //     data: {
-        //         len: 4
-        //     }
-        // }).then(res => {
-        //     this.setState({
-        //         commentList: res.data.list
-        //     });
-        // });
+        axios({
+            url: apis.getWater,
+            method: 'get',
+            data: {
+                len: 4
+            }
+        }).then(res => {
+            this.setState({
+                commentList: res.data.data.list
+            });
+        });
     }
 
     componentWillReceiveProps(){}

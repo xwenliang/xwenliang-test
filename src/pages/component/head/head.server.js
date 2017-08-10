@@ -1,12 +1,9 @@
 import React from 'react';
-import $ from '../../../vendor/jquery/jquery';
-import '../../../css/common.less';
-import './head.less';
+import axios from 'axios';
 import {
     apis,
     routers
 } from '../../main';
-
 /* @props
 
  */
@@ -20,10 +17,10 @@ export default class Head extends React.Component{
         };
     }
     logout(){
-        $.ajax({
+        axios({
             url: apis.getLogout,
-            type: 'get',
-            dataType: 'json'
+            method: 'get',
+            responseType: 'json'
         }).then(resp => {
             this.setState({
                 loginStatus: false
@@ -70,18 +67,6 @@ export default class Head extends React.Component{
                 </div>
             </header>
         );
-    }
-    componentDidMount(){
-        $.ajax({
-            url: apis.getLoginStatus,
-            type: 'get',
-            dataType: 'json'
-        }).then(resp => {
-            this.setState({
-                loginStatus: resp.data.loginStatus,
-                loginUser: resp.data.user
-            });
-        });
     }
     componentWillReceiveProps(props){
         this.setState({

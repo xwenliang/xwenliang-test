@@ -1,7 +1,13 @@
 import React from 'react';
-import $ from '../../../vendor/jquery/jquery';
-import '../../../css/common.less';
-import './comment.less';
+import {
+    ajax,
+    trim,
+    strLen
+} from '../../../vendor/util/util';
+import {
+    apis,
+    routers
+} from '../../main';
 
 class Item extends React.Component{
     constructor(props){
@@ -12,7 +18,9 @@ class Item extends React.Component{
     }
     render(){
         let comment = this.state.comment;
-        let userItem = comment.isRegisted ? <a href={"/u/" + comment.user}>{comment.user}</a> : comment.user;
+        let userItem = comment.isRegisted 
+            ? <a href={"/u/" + comment.user}>{comment.user}</a>
+            : comment.user;
         return (
             <li>
                 <span className="c-name">{userItem}</span>
@@ -52,11 +60,6 @@ export default class Comment extends React.Component{
             ...props
         }
     }
-    componentWillReceiveProps(props){
-        this.setState({
-            ...props
-        });
-    }
     render(){
         let items = [];
         let total = this.state.showListTotal ? <span className="c-total">({this.state.commentLen})</span> : null;
@@ -79,6 +82,7 @@ export default class Comment extends React.Component{
                 </ul>
                 <div className="c-input" ref={publishBox => this.publishBox = publishBox}>
                     <textarea
+                        ref={textarea => this.textarea = textarea}
                         onInput={this.inputHandler.bind(this)}
                         onKeyDown={this.enterKeyPublish.bind(this)}
                     />
@@ -99,9 +103,14 @@ export default class Comment extends React.Component{
             </div>
         );
     }
+    componentWillReceiveProps(props){
+        this.setState({
+            ...props
+        });
+    }
     inputHandler(e){
         let state = {
-            limit: this.state.maxLen - this.strLen(e.target.value)
+            limit: this.state.maxLen - strLen(e.target.value)
         };
         if(state.limit < 0){
             state.errClass = 'c-red';
@@ -115,21 +124,21 @@ export default class Comment extends React.Component{
     }
     publish(e){
         let el = e.currentTarget;
-        let parent = this.publishBox;
-        let $input = $(parent).find('textarea');
-        let val = $.trim($input.val());
-        let publishData = $.extend({}, {text: val}, this.state.publishData);
-        if(el.ajaxing || !val || this.strLen(val) > this.state.maxLen){
+        let $input = this.textarea;
+        let val = trim($input.value);
+        let publishData = {
+            text: val, 
+            ...this.state.publishData
+        };
+        if(el.ajaxing || !val || strLen(val) > this.state.maxLen){
             return;
         }
         el.ajaxing = true;
 
-        $.ajax({
+        ajax({
             url: this.state.publishUrl,
-            data: publishData,
             type: 'post',
-            dataType: 'json',
-            context: this
+            data: publishData,
         }).then(ret => {
             //首页的灌水，只显示四条，所以多于四条的时候要做下处理
             if(this.state.showListNum && this.state.listData.length > this.state.showListNum - 1){
@@ -144,7 +153,7 @@ export default class Comment extends React.Component{
                 commentLen: ++this.state.commentLen
             });
             //删除输入框中已发布的内容
-            $input.val('');
+            $input.value = '';
             this.setState({maxLen: this.state.maxLen});
             el.ajaxing = false;
         });
@@ -154,10 +163,6 @@ export default class Comment extends React.Component{
             this.publish(e);
             e.preventDefault();
         }
-    }
-    strLen(str){
-        let reg = /[\u0100-\uFFFF]/ig;
-        return Math.round(str.replace(reg, 'ab').length/2);
     }
 };
 

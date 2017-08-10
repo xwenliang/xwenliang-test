@@ -14,7 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.2",
     "lodash": "^4.17.4",
+    "qs": "^6.5.0",
     "react": "^15.5.4",
     "react-addons-test-utils": "^15.6.0",
     "react-dom": "^15.5.4",

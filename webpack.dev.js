@@ -1,13 +1,11 @@
 import webpack from 'webpack';
 import WebpackDevServer from 'webpack-dev-server';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 import path from 'path';
 
-import ReactDOMServer from 'react-dom/server';
-import Index from './src/pages/index/index.server';
-//import React from 'react';
-console.log(ReactDOMServer.renderToString(<Index/>));
+const targetDir = '/Users/zooble/Documents/case/xwenliang.cn/5';
 
 let pages = [
     'index',
@@ -26,7 +24,7 @@ let htmlPluginArr = pages.map(page => {
         inject: 'body',
         template: `./src/pages/${page}/${page}.html`,
         chunks: ['common', page],
-        filename: `/Users/zooble/Documents/case/xwenliang.cn/5/app/view/${page}.html`
+        filename: path.resolve(targetDir, `app/view/${page}.html`)
     });
 });
 
@@ -39,7 +37,7 @@ let config = {
     output: {
         filename: '[name].js',
         chunkFilename: '[name].js',
-        path: '/Users/zooble/Documents/case/xwenliang.cn/5/static',
+        path: path.resolve(targetDir, 'static'),
         publicPath: '/static'
     },
     module: {
@@ -75,23 +73,25 @@ let config = {
             {
                 test: /\.(css|less)$/,
                 exclude: /node_modules/,
-                use: [
-                    {
-                        loader: 'style-loader'
-                    },
-                    {
-                        loader: 'css-loader',
-                        options: {
-                            importLoaders: 1
+                //It doesn't work with Hot Module Replacement by design
+                use: ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: [
+                        {
+                            loader: 'css-loader',
+                            options: {
+                                //the number 1, just set this value to true
+                                importLoaders: 1
+                            }
+                        },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                noIeCompat: true
+                            }
                         }
-                    },
-                    {
-                        loader: 'less-loader',
-                        options: {
-                            noIeCompat: true
-                        }
-                    }
-                ]
+                    ]
+                })
             },
             //favicon
             {
@@ -125,6 +125,12 @@ let config = {
         ]
     },
     plugins: [
+        new ExtractTextPlugin({
+            // but the hash was js's....(use contenthash instead chunkhash will avoid this problem)
+            filename: '[name].css',
+            allChunks: true
+        }),
+        
         new webpack.optimize.CommonsChunkPlugin({
             name: 'common',
             filename: '[name].js',
