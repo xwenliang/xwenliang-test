@@ -1,35 +1,35 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../../css/common.less';
+import '../../component/head/head.less';
 import './newpost.less';
-import $ from '../../vendor/jquery/jquery';
-import Head from '../component/head/head';
-import Editor from '../component/editor/editor';
-import {
-    apis
-} from '../main';
+import Head from '../../component/head/head.server';
+import Editor from '../../component/editor/editor';
+import { ajax } from '../../vendor/util/util';
+import { apis } from '../../main';
 
 class NewPost extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            user: null,
             title: '',
             category: '',
             tags: '',
             content: '',
-            categories: []
+            categories: [],
+            ...props
         };
     }
     componentWillMount(){
         let postId = window.location.href.split('?').pop();
         //获取分类
-        $.ajax({
+        ajax({
             url: apis.getCategory,
             type: 'get',
-            dataType: 'json',
         }).then(res => {
             this.setState({
-                categories: res.data
+                categories: res.data.data.categorys
             });
         });
         //新建文章
@@ -37,10 +37,9 @@ class NewPost extends React.Component{
             return;
         }
         //编辑文章
-        $.ajax({
+        ajax({
             url: apis.getPostInfo,
             type: 'get',
-            dataType: 'json',
             data: {
                 postId
             }
@@ -60,7 +59,10 @@ class NewPost extends React.Component{
         });
         return (
             <div>
-                <Head/>
+                <Head
+                    loginStatus={!!this.state.user}
+                    loginUser={this.state.user}
+                />
                 <div className="page-post wrap">
                     <input
                         className="post-tit"
@@ -125,30 +127,40 @@ class NewPost extends React.Component{
     }
     publish(){
         let postData = this.getContent();
-        $.ajax({
+        ajax({
             url: apis.publishPost,
             type: 'post',
-            dataType: 'json',
             data: {
                 status: 'publish',
                 ...postData
             }
         }).then(res => {
-
+            if(res.data.code !== 1){
+                return ;
+            }
+            // clear autosaved value
+            this.editor.stopAutosave();
+            this.editor.clearValue();
+            window.location.href = res.data.data.redirect
         });
     }
     save(){
         let postData = this.getContent();
-        $.ajax({
+        ajax({
             url: apis.publishPost,
             type: 'post',
-            dataType: 'json',
             data: {
                 status: 'draft',
                 ...postData
             }
         }).then(res => {
-
+            if(res.data.code !== 1){
+                return ;
+            }
+            // clear autosaved value
+            this.editor.stopAutosave();
+            this.editor.clearValue();
+            window.location.href = res.data.data.redirect
         });
     }
     inputTitle(e){

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import SimpleMDE from '../../../vendor/simplemde/simplemde.min';
-import Prism from '../../../vendor/prismjs/prism';
-import '../../../css/font/font-awesome.min.css';
-import '../../../vendor/simplemde/simplemde.min.css';
-import '../../../vendor/prismjs/prism.css';
+import SimpleMDE from '../../vendor/simplemde/simplemde';
+import Prism from '../../vendor/prismjs/prism';
+import '../../css/font/font-awesome.min.css';
+import '../../vendor/simplemde/simplemde.css';
+import '../../vendor/prismjs/prism.css';
 import './editor.less';
 
 /* https://github.com/NextStepWebs/simplemde-markdown-editor
@@ -24,7 +24,7 @@ let editorConfig = {
     autosave: {
         enabled: true,
         delay: 1000,
-        uniqueId: 'someID'
+        uniqueId: 'zoo_editor_auto_save'
     },
     blockStyles: {
         bold: "__",
@@ -136,6 +136,12 @@ export default class Editor extends React.Component{
     }
     getHtml(val){
         return this.simplemde.markdown(val);
+    }
+    stopAutosave(){
+        this.simplemde.stopAutosave();
+    }
+    clearValue(){
+        this.simplemde.clearAutosavedValue();
     }
 };
 

@@ -3,11 +3,16 @@ import {
     ajax,
     trim,
     strLen
-} from '../../../vendor/util/util';
+} from '../../vendor/util/util';
 import {
     apis,
     routers
 } from '../../main';
+
+/* @for node reason this cannot be import
+ * @import '../../css/common.less';
+ * @import './comment.less';
+ */
 
 class Item extends React.Component{
     constructor(props){
@@ -15,6 +20,11 @@ class Item extends React.Component{
         this.state = {
             ...props
         };
+    }
+    createMarkup(html){
+        return {
+            __html: `: ${html}`
+        }
     }
     render(){
         let comment = this.state.comment;
@@ -29,10 +39,10 @@ class Item extends React.Component{
             </li>
         );
     }
-    createMarkup(html){
-        return {
-            __html: `: ${html}`
-        }
+    componentWillReceiveProps(props){
+        this.setState({
+            ...props
+        });
     }
 };
 /*
@@ -59,54 +69,6 @@ export default class Comment extends React.Component{
             commentLen: props.listData.length,
             ...props
         }
-    }
-    render(){
-        let items = [];
-        let total = this.state.showListTotal ? <span className="c-total">({this.state.commentLen})</span> : null;
-        let title = this.state.title ? <h6 className="c-tit">{this.state.title}{total}</h6> : null;
-        let getMoreBtn = this.state.getMoreUrl ? <a className="c-all gray" href={this.state.getMoreUrl}>查看所有</a> : null;
-        //当不存在数据时，显示提示语
-        if(!this.state.listData.length){
-            items.push(this.state.noDataTips)
-        }
-        else{
-            this.state.listData.map((comment, index) => {
-                items.push(<Item key={index} comment={comment}/>);
-            })
-        }
-        return (
-            <div className={`comment ${this.state.className}`}>
-                {title}
-                <ul className="c-ul">
-                    {items}
-                </ul>
-                <div className="c-input" ref={publishBox => this.publishBox = publishBox}>
-                    <textarea
-                        ref={textarea => this.textarea = textarea}
-                        onInput={this.inputHandler.bind(this)}
-                        onKeyDown={this.enterKeyPublish.bind(this)}
-                    />
-                    <div className="c-btns ib-wrap">
-                        <button
-                            className="c-pub green"
-                            onClick={this.publish.bind(this)}
-                        >发表</button>
-                        {getMoreBtn}
-                        <span className="c-tips">
-                            <em>{this.state.errText}</em>
-                            <em
-                                className={"c-num " + this.state.errClass}
-                            >{Math.abs(this.state.limit)}</em>个字
-                        </span>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-    componentWillReceiveProps(props){
-        this.setState({
-            ...props
-        });
     }
     inputHandler(e){
         let state = {
@@ -144,17 +106,17 @@ export default class Comment extends React.Component{
             if(this.state.showListNum && this.state.listData.length > this.state.showListNum - 1){
                 this.state.listData.pop();
             }
-            var listData = this.state.reversed
-                    ? [ret.data].concat(this.state.listData)
-                    : this.state.listData.concat([ret.data]);
+            let listData = this.state.reversed
+                    ? [ret.data.data].concat(this.state.listData)
+                    : this.state.listData.concat([ret.data.data]);
             //增加评论和评论数
             this.setState({
-                listData: listData,
+                listData,
+                maxLen: this.state.maxLen,
                 commentLen: ++this.state.commentLen
             });
             //删除输入框中已发布的内容
             $input.value = '';
-            this.setState({maxLen: this.state.maxLen});
             el.ajaxing = false;
         });
     }
@@ -163,6 +125,54 @@ export default class Comment extends React.Component{
             this.publish(e);
             e.preventDefault();
         }
+    }
+    render(){
+        let items = [];
+        let total = this.state.showListTotal ? <span className="c-total">({this.state.commentLen})</span> : null;
+        let title = this.state.title ? <h6 className="c-tit">{this.state.title}{total}</h6> : null;
+        let getMoreBtn = this.state.getMoreUrl ? <a className="c-all gray" href={this.state.getMoreUrl}>查看所有</a> : null;
+        //当不存在数据时，显示提示语
+        if(!this.state.listData.length){
+            items.push(this.state.noDataTips);
+        }
+        else{
+            this.state.listData.map((comment, index) => {
+                items.push(<Item key={index} comment={comment}/>);
+            });
+        }
+        return (
+            <div className={`comment ${this.state.className}`}>
+                {title}
+                <ul className="c-ul">
+                    {items}
+                </ul>
+                <div className="c-input" ref={publishBox => this.publishBox = publishBox}>
+                    <textarea
+                        ref={textarea => this.textarea = textarea}
+                        onInput={this.inputHandler.bind(this)}
+                        onKeyDown={this.enterKeyPublish.bind(this)}
+                    />
+                    <div className="c-btns ib-wrap">
+                        <button
+                            className="c-pub green"
+                            onClick={this.publish.bind(this)}
+                        >发表</button>
+                        {getMoreBtn}
+                        <span className="c-tips">
+                            <em>{this.state.errText}</em>
+                            <em
+                                className={"c-num " + this.state.errClass}
+                            >{Math.abs(this.state.limit)}</em>个字
+                        </span>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+    componentWillReceiveProps(props){
+        this.setState({
+            ...props
+        });
     }
 };
 

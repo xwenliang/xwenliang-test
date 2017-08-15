@@ -33,6 +33,9 @@ function strLen(str){
 };
 
 function getCookie(key){
+    if(typeof window === 'undefined'){
+        return function(){ return '';};
+    }
     let cookie = document.cookie;
     let cookieArr = cookie.split('; ');
     let value = null;
@@ -48,6 +51,9 @@ function getCookie(key){
 };
 
 function setCookie(key, val, expiredays){
+    if(typeof window === 'undefined'){
+        return function(){ return '';};
+    }
     if(getCookie(key) !== null){
         return console.log(`there are already have ${key} in cookie.`);
     }

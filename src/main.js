@@ -8,15 +8,15 @@ let apis = {
     getWater            : `${domain}/getWater`,
     postWater           : `${domain}/postwater`,
     publishPost         : `${domain}/publishPost`,
-    getCategory         : `/getCategory`,
+    getCategory         : `${domain}/getCategory`,
     getPostInfo         : `${domain}/getPostInfo`
 };
 
 let routers = {
-    login               : `${domain}/login.html`,
-    reg                 : `${domain}/reg.html`,
-    index               : `${domain}/index.html`,
-    water               : `${domain}/water.html`
+    login               : `${domain}/login`,
+    reg                 : `${domain}/reg`,
+    index               : `${domain}/`,
+    water               : `${domain}/water`
 };
 
 export {

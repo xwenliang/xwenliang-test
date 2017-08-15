@@ -1,19 +1,18 @@
 import React from 'react';
 import axios from 'axios';
-import Head from '../component/head/head.server';
-import ListItem from '../component/listItem/listItem.server';
-import Comment from '../component/comment/comment.server';
-import {
-    apis,
-    routers
-} from '../main';
+import Head from '../../component/head/head.server';
+import ListItem from '../../component/listItem/listItem.server';
+import Comment from '../../component/comment/comment.server';
+import { ajax } from '../../vendor/util/util';
+import { apis, routers } from '../../main';
 
 export default class Index extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            user: null,
             date: new Date(),
-            articalList: typeof window === 'undefined' ? [] : window.articalList,
+            articalList: [],
             commentList: [],
             ...props
         };
@@ -22,7 +21,10 @@ export default class Index extends React.Component{
     render(){
         return (
             <div>
-                <Head/>
+                <Head
+                    loginStatus={!!this.state.user}
+                    loginUser={this.state.user}
+                />
                 <div className="page-index wrap fix">
                     <div className="artical">
                         {this.state.articalList.map((li, key) => <ListItem key={key} data={li} />)}
@@ -62,9 +64,9 @@ export default class Index extends React.Component{
         //     });
         // });
         // //首页灌水数据
-        axios({
+        ajax({
             url: apis.getWater,
-            method: 'get',
+            type: 'get',
             data: {
                 len: 4
             }

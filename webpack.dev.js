@@ -11,6 +11,7 @@ let pages = [
     'index',
     'login',
     'reg',
+    'user',
     'newpost'
 ];
 

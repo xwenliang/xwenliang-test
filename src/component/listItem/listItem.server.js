@@ -1,7 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import '../../../css/common.less';
-import './listItem.less';
+
+/* @for node reason this cannot be import
+ * @import '../../css/common.less';
+ * @import './listItem.less';
+ */
 
 export default class ListItem extends React.Component{
     constructor(props){
@@ -10,11 +12,6 @@ export default class ListItem extends React.Component{
             date: this.convertDate(props.data.date),
             ...props
         };
-    }
-    componentWillReceiveProps(props){
-        this.setState({
-            ...props
-        });
     }
     render(){
         let data = this.state.data;
@@ -38,6 +35,11 @@ export default class ListItem extends React.Component{
                 </div>
             </div>
         );
+    }
+    componentWillReceiveProps(props){
+        this.setState({
+            ...props
+        });
     }
     // componentDidMount(){
     //     var el = ReactDOM.findDOMNode(this.dateDom);

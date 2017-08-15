@@ -1,11 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-import {
-    apis,
-    routers
-} from '../../main';
-/* @props
+import { apis, routers } from '../../main';
 
+/* @for node reason this cannot be import
+ * @import '../../css/common.less';
+ * @import './head.less';
+ */
+
+/* @props
+ * @loginStatus: 
+ * @loginUser: 
  */
 export default class Head extends React.Component{
     constructor(props){

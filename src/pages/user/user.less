@@ -1,0 +1,104 @@
+@import '../../css/mixin.less';
+.page-user{
+    padding-top: 57px;
+    .list{
+        width: 680px;
+        float: left;
+    }
+    .user{
+        width: 300px;
+        float: right;
+    }
+
+    .published-tit,
+    .draft-tit{
+        margin-bottom: 15px;
+        padding: 10px 15px;
+        .tit{
+            display: inline-block;
+            font-size: 16px;
+            font-weight: bold;
+            color: @color-link;
+            border-bottom: 2px solid @color-link;
+        }
+        .total{
+            margin-top: 5px;
+            float: right;
+            font-size: 14px;
+            color: @color-font-sub;
+        }
+    }
+    
+    .artical-ul{
+        margin-bottom: 30px;
+        .artical-li{
+            position: relative;
+            margin-top: 20px;
+            line-height: 24px;
+            .title{
+                padding-bottom: 5px;
+                a{
+                    font-weight: bold;
+                    width: 420px;
+                    white-space: nowrap;
+                    font-size: 16px;
+                    display: inline-block;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+            .total{
+                position: absolute;
+                right: 15px;
+                top: 10px;
+                color: @color-font-sub;
+                .tag{
+                    margin-left: 10px;
+                }
+            }
+            .box-foot{
+                margin-top: 5px;
+                line-height: 1.2;
+                text-align: right;
+                a,
+                span{
+                    line-height: 1.2;
+                }
+            }
+        }
+    }
+
+    .user-info{
+        text-align: center;
+        .user-img{
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: 0 0 10px #dfdfdf;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .user-name{
+            margin-bottom: 5px;
+        }
+        .user-des{
+            width: 132px;
+            margin: 0 auto;
+            max-height: 128px;
+            overflow: hidden; padding: 5px;
+            word-break: break-all;
+        }
+    }
+    .user-btn{
+        margin-top: 20px;
+        a{
+            margin-right: 10px;
+            color: #fff;
+        }
+    }
+}
