@@ -5,13 +5,16 @@ import HtmlWebpackPlugin from 'html-webpack-plugin';
 import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
 import path from 'path';
 
-const targetDir = '/Users/zooble/Documents/case/xwenliang.cn/5';
+const targetDir = '/Users/zooble/Documents/case/xwenliang.cn';
 
 let pages = [
+    //前后同构
     'index',
     'login',
     'reg',
     'user',
+    'post',
+    //仅前端
     'newpost'
 ];
 

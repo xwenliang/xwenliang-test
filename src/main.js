@@ -16,7 +16,16 @@ let routers = {
     login               : `${domain}/login`,
     reg                 : `${domain}/reg`,
     index               : `${domain}/`,
-    water               : `${domain}/water`
+    water               : `${domain}/water`,
+    post(id){
+        return `${domain}/p/${id}`;
+    },
+    user(id){
+        return `${domain}/u/${id}`;
+    },
+    category(id){
+        return `${domain}/c/${id}`;
+    }
 };
 
 export {

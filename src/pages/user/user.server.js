@@ -11,7 +11,6 @@ export default class Login extends React.Component {
             ...props
         };
     }
-
     render(){
         return (
             <div>
@@ -25,12 +24,18 @@ export default class Login extends React.Component {
                             <p className="tit">草稿箱</p>
                             <span className="total">共 {this.state.draftList.length} 篇</span>
                         </div>
-                        {this.state.draftList.map((li, key) => <ListItem key={key} data={li} />)}
+                        {this.state.draftList.map((li, key) => {
+                            li.href = routers.post(li._id);
+                            return <ListItem key={key} data={li} />
+                        })}
                         <div className="draft-tit box">
                             <p className="tit">已发布</p>
                             <span className="total">共 {this.state.publishList.length} 篇</span>
                         </div>
-                        {this.state.publishList.map((li, key) => <ListItem key={key} data={li} />)}
+                        {this.state.publishList.map((li, key) => {
+                            li.href = routers.post(li._id);
+                            return <ListItem key={key} data={li} />
+                        })}
                     </div>
                     <div className="user">
                         <div className="box user-info">

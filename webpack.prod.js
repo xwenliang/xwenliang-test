@@ -1,20 +1,20 @@
-const webpack = require('webpack');
+import webpack from 'webpack';
+import WebpackDevServer from 'webpack-dev-server';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import OptimizeCSSPlugin from 'optimize-css-assets-webpack-plugin';
+import path from 'path';
 
-const WebpackDevServer = require('webpack-dev-server');
-
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-
-const args = process.argv;
-const path = require('path');
-
+const targetDir = '/Users/zooble/Documents/case/xwenliang.cn';
 
 let pages = [
+    //前后同构
     'index',
     'login',
+    'reg',
+    'user',
+    'post',
+    //仅前端
     'newpost'
 ];
 
@@ -27,10 +27,8 @@ let htmlPluginArr = pages.map(page => {
     return new HtmlWebpackPlugin({
         inject: 'body',
         template: `./src/pages/${page}/${page}.html`,
-        // inject modules from entry's key
         chunks: ['manifest', 'common', page],
-        filename: `./${page}.html`,
-        path: path.join(__dirname, 'build')
+        filename: path.resolve(targetDir, `app/view/${page}.html`)
     });
 });
 
@@ -43,9 +41,9 @@ let config = {
     output: {
         filename: '[name]_[chunkhash:5].js',
         chunkFilename: '[name]_[chunkhash:5].js',
-        path: path.join(__dirname, 'build')
+        path: path.resolve(targetDir, 'static'),
+        publicPath: '/static'
     },
-    watch: true,
     module: {
         rules: [
             // js
@@ -70,7 +68,7 @@ let config = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: './images/[name]_[hash:5].[ext]'
+                            name: '/images/[name]_[hash:5].[ext]'
                         }
                     }
                 ]
@@ -125,7 +123,7 @@ let config = {
                 loader: 'url-loader',
                 options: {
                     limit: 10,//B
-                    name: './images/[name]_[hash:5].[ext]'
+                    name: '/images/[name]_[hash:5].[ext]'
                 }
             }
         ]
@@ -164,7 +162,16 @@ let config = {
 
         ...htmlPluginArr,
 
-        new webpack.optimize.UglifyJsPlugin(),
+        new webpack.DefinePlugin({
+            'process.env':{
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.optimize.UglifyJsPlugin({
+            compress:{
+                warnings: true
+            }
+        }),
         new OptimizeCSSPlugin({
             cssProcessorOptions: {
                 safe: true

@@ -4,7 +4,8 @@
   "description": "test",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "babel-node webpack.dev.js",
+    "build": "babel-node webpack.prod.js"
   },
   "repository": {
     "type": "git",

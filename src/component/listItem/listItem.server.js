@@ -18,7 +18,7 @@ export default class ListItem extends React.Component{
         return (
             <div className="box item">
                 <h2 className="title">
-                    <a href="">{data.title}</a>
+                    <a href={data.href}>{data.title}</a>
                 </h2>
                 <div
                     className="date"
@@ -26,7 +26,7 @@ export default class ListItem extends React.Component{
                 >
                     {this.state.date}
                 </div>
-                <div className="cont">{data.content}</div>
+                <div className="cont" dangerouslySetInnerHTML={{__html: data.content}}></div>
                 <div className="box-foot ib-wrap">
                     <a className="category" href="" title="">{data.category}</a>
                     <span className="i-eye"> {data.pageviews}</span>

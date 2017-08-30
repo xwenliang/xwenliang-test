@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Head from '../../component/head/head.server';
 import { ajax, trim } from '../../vendor/util/util';
 import { apis, routers } from '../../main';

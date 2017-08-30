@@ -26,4 +26,4 @@ common.js:446 Warning: render(): Target node has markup rendered by React, but t
 
 
 
- pm2 start --interpreter babel-node app.js --watch
+pm2 start --interpreter babel-node app.js --watch

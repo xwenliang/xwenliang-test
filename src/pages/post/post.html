@@ -9,7 +9,13 @@
     <meta name="author" content="zooble,wenliang.web@gmail.com">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
 </head>
-
+<script>
+    var serverData = {
+        user: <%- user %>,
+        host: <%- host %>,
+        post: <%- post %>
+    };
+</script>
 <body>
     <div id="post"><%- componentServerTpl %></div>
 </body>

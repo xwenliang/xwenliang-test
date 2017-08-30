@@ -27,7 +27,10 @@ export default class Index extends React.Component{
                 />
                 <div className="page-index wrap fix">
                     <div className="artical">
-                        {this.state.articalList.map((li, key) => <ListItem key={key} data={li} />)}
+                        {this.state.articalList.map((li, key) => {
+                            li.href = routers.post(li._id);
+                            return <ListItem key={key} data={li} />
+                        })}
                     </div>
                     <div className="right">
                         <div className="water box">
@@ -54,16 +57,7 @@ export default class Index extends React.Component{
     }
 
     componentDidMount(){
-        //列表数据
-        // axios({
-        //     url: apis.getPosts,
-        //     method: 'get'
-        // }).then(res => {
-        //     this.setState({
-        //         articalList: res.data.data.posts
-        //     });
-        // });
-        // //首页灌水数据
+        //首页灌水数据
         ajax({
             url: apis.getWater,
             type: 'get',
