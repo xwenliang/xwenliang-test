@@ -9,7 +9,8 @@ let apis = {
     postWater           : `${domain}/postwater`,
     publishPost         : `${domain}/publishPost`,
     getCategory         : `${domain}/getCategory`,
-    getPostInfo         : `${domain}/getPostInfo`
+    getPostInfo         : `${domain}/getPostInfo`,
+    comment             : `${domain}/comment`
 };
 
 let routers = {

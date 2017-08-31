@@ -62,10 +62,42 @@ function setCookie(key, val, expiredays){
     document.cookie = `${key}=${escape(val)};expires=${exDate.toGMTString()}`;
 };
 
+function convertDate(date){
+    let diff = new Date().getTime() - new Date(date).getTime();
+    let time = '';
+    //小于5分钟->刚刚
+    if(diff < 5*60*1000){
+        time = '刚刚';
+    }
+    //小于1小时->xx分钟前
+    else if(diff < 1*60*60*1000){
+        time = parseInt(diff/1000/60) + '分钟前';
+    }
+    //小于24小时->xx小时前
+    else if(diff < 24*60*60*1000){
+        time = parseInt(diff/1000/60/60) + '小时前';
+    }
+    //小于30天->xx天前
+    else if(diff < 30*24*60*60*1000){
+        time = parseInt(diff/1000/60/60/24) < 2 ? '昨天' : (parseInt(diff/1000/60/60/24) + '天前');
+    }
+    //小于1年->xx个月前
+    else if(diff < 365*24*60*60*1000){
+        time = parseInt(diff/1000/60/60/24/30) + '个月前';
+    }
+    //x年x月前
+    else{
+        let days = parseInt(diff/1000/60/60/24);
+        time = parseInt(days/365) + '年' + (parseInt(days%365/30) ? (parseInt(days%365/30) + '个月前') : '前');
+    }
+    return time;
+};
+
 export {
     ajax,
     trim,
     strLen,
     getCookie,
-    setCookie
-}
+    setCookie,
+    convertDate
+};

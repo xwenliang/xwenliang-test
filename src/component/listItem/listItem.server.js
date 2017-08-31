@@ -1,4 +1,5 @@
 import React from 'react';
+import { convertDate } from '../../vendor/util/util';
 
 /* @for node reason this cannot be import
  * @import '../../css/common.less';
@@ -9,7 +10,7 @@ export default class ListItem extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            date: this.convertDate(props.data.date),
+            date: convertDate(props.data.date),
             ...props
         };
     }
@@ -49,35 +50,5 @@ export default class ListItem extends React.Component{
         this.setState({
             date: this.state.data.date
         });
-    }
-    convertDate(date){
-        let diff = new Date().getTime() - new Date(date).getTime();
-        let time = '';
-        //小于5分钟->刚刚
-        if(diff < 5*60*1000){
-            time = '刚刚';
-        }
-        //小于1小时->xx分钟前
-        else if(diff < 1*60*60*1000){
-            time = parseInt(diff/1000/60) + '分钟前';
-        }
-        //小于24小时->xx小时前
-        else if(diff < 24*60*60*1000){
-            time = parseInt(diff/1000/60/60) + '小时前';
-        }
-        //小于30天->xx天前
-        else if(diff < 30*24*60*60*1000){
-            time = parseInt(diff/1000/60/60/24) < 2 ? '昨天' : (parseInt(diff/1000/60/60/24) + '天前');
-        }
-        //小于1年->xx个月前
-        else if(diff < 365*24*60*60*1000){
-            time = parseInt(diff/1000/60/60/24/30) + '个月前';
-        }
-        //x年x月前
-        else{
-            let days = parseInt(diff/1000/60/60/24);
-            time = parseInt(days/365) + '年' + (parseInt(days%365/30) ? (parseInt(days%365/30) + '个月前') : '前');
-        }
-        return time;
     }
 };

@@ -24,6 +24,8 @@ common.js:446 Warning: render(): Target node has markup rendered by React, but t
 
  React attempted to reuse markup in a container but the checksum was invalid
 
+压缩报警
+https://github.com/facebook/react/issues/6479
 
 
 pm2 start --interpreter babel-node app.js --watch

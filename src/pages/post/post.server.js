@@ -1,5 +1,6 @@
 import React from 'react';
 import Head from '../../component/head/head.server';
+import Comment from '../../component/comment/comment.server';
 import { ajax, trim } from '../../vendor/util/util';
 import { apis, routers } from '../../main';
 
@@ -37,13 +38,26 @@ export default class Post extends React.Component {
                         </div>
                         <h1 className="title">{this.state.post.title}</h1>
                         <div className="status ib-wrap">
-                            <a href={routers.category(this.state.post.category)}>{this.state.post.category}</a>
-                            <span className="dot"></span>
+                            <a className="category" href={routers.category(this.state.post.category)}>{this.state.post.category}</a>
                             <span className="date-num">{this.state.post.date}</span>
                         </div>
                         <div className="artical">
                             <div className="workplace" dangerouslySetInnerHTML={{__html: this.state.post.content}}></div>
                         </div>
+
+                        <Comment
+                            className="post-comment"
+                            title="评论"
+                            //输入框最多允许输入70字符
+                            maxLen="200"
+                            //发布数据的地址
+                            publishUrl={apis.comment}
+                            publishData={{_id: this.state.post._id}}
+                            //初始数据
+                            listData={this.state.post.comments}
+                            showListTotal={true}
+                            noDataTips={<li className="no-data" key="no-data">暂无评论，求挽尊...</li>}
+                        />
                     </div>
                 </div>
             </div>

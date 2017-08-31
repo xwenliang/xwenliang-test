@@ -2,7 +2,8 @@ import React from 'react';
 import {
     ajax,
     trim,
-    strLen
+    strLen,
+    convertDate
 } from '../../vendor/util/util';
 import {
     apis,
@@ -35,7 +36,7 @@ class Item extends React.Component{
             <li>
                 <span className="c-name">{userItem}</span>
                 <span className="c-text" dangerouslySetInnerHTML={this.createMarkup(comment.text)}></span>
-                <span className="c-date">{comment.date}</span>
+                <span className="c-date">{convertDate(comment.date)}</span>
             </li>
         );
     }
