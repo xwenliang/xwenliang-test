@@ -10,7 +10,7 @@
 	font-weight: normal;
 	font-style: normal;
 }
-[class^="i-"]:before, [class*=" i-"]:before{
+[class^="i-"]::before, [class*=" i-"]::before{
 	font-family: "fonts";
 	speak: none;
 	font-style: normal;
@@ -20,13 +20,13 @@
 	line-height: 1;
 	-webkit-font-smoothing: antialiased;
 }
-.i-eye:before {
+.i-eye::before {
 	content: "\e010";
 }
-.i-heart:before {
+.i-heart::before {
 	content: "\e011";
 }
-.i-comment:before {
+.i-comment::before {
 	content: "\e012";
 }
 

@@ -94,7 +94,9 @@ let editorConfig = {
         // 'quote',
         // 'unordered-list',
         // 'ordered-list',
-        'guide'
+        'guide',
+        'side-by-side',
+        'fullscreen'
     ]
 };
 
