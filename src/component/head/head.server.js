@@ -52,8 +52,8 @@ export default class Head extends React.Component{
         (
             <div className="right-navs">
                 <div className="ib-wrap">
-                    <a href={routers.login}>登录</a>
-                    <a href={routers.reg}>注册</a>
+                    <a href={routers.login()}>登录</a>
+                    <a href={routers.reg()}>注册</a>
                 </div>
             </div>
         );
@@ -64,7 +64,7 @@ export default class Head extends React.Component{
                 <div className="header-wrap">
                     <div className="wrap fix">
                         <h1>web开发笔记</h1>
-                        <div className="logo"><a href={routers.index} title="web开发笔记">zooble</a></div>
+                        <div className="logo"><a href={routers.index()} title="web开发笔记">zooble</a></div>
                         {leftNavs}
                         {rightNavs}
                     </div>

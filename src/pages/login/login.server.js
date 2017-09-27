@@ -116,7 +116,7 @@ export default class Login extends React.Component {
                         </p>
                         <p className="switch">
                             <a onClick={this.switchUser.bind(this)}>切换用户</a>
-                            <a href={routers.reg}>注册</a>
+                            <a href={routers.reg()}>注册</a>
                         </p>
                     </div>
                 </div>

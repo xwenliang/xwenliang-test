@@ -8,16 +8,25 @@ let apis = {
     getWater            : `${domain}/getWater`,
     postWater           : `${domain}/postwater`,
     publishPost         : `${domain}/publishPost`,
+    updatePost          : `${domain}/updatePost`,
     getCategory         : `${domain}/getCategory`,
     getPostInfo         : `${domain}/getPostInfo`,
     comment             : `${domain}/comment`
 };
 
 let routers = {
-    login               : `${domain}/login`,
-    reg                 : `${domain}/reg`,
-    index               : `${domain}/`,
-    water               : `${domain}/water`,
+    login(){
+        return `${domain}/login`;
+    },
+    reg(){
+        return `${domain}/reg`;
+    },
+    index(){
+        return `${domain}/`;
+    },
+    water(){
+        return `${domain}/water`;
+    },
     post(id){
         return `${domain}/p/${id}`;
     },

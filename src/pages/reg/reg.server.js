@@ -65,7 +65,7 @@ export default class Reg extends React.Component {
                             >注 册</button>
                         </p>
                         <p className="switch">
-                            <a href={routers.login}>登录</a>
+                            <a href={routers.login()}>登录</a>
                         </p>
                     </div>
                 </div>

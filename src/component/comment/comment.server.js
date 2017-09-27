@@ -5,10 +5,6 @@ import {
     strLen,
     convertDate
 } from '../../vendor/util/util';
-import {
-    apis,
-    routers
-} from '../../main';
 
 /* @for node reason this cannot be import
  * @import '../../css/common.less';

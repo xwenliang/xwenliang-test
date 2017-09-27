@@ -7,7 +7,7 @@ import '../../vendor/simplemde/simplemde.css';
 import '../../vendor/prismjs/prism.css';
 import './editor.less';
 
-/* https://github.com/NextStepWebs/simplemde-markdown-editor
+/* https://github.com/sparksuite/simplemde-markdown-editor
  * @props: 
  *      editorConfig: {
  *          placeholder: 'some editor config'
@@ -135,7 +135,7 @@ export default class Editor extends React.Component{
         return this.simplemde.value();
     }
     getHtml(val){
-        return this.simplemde.markdown(val);
+        return SimpleMDE.prototype.markdown(val);
     }
     stopAutosave(){
         this.simplemde.stopAutosave();

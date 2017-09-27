@@ -15,7 +15,8 @@ let pages = [
     'user',
     'post',
     //仅前端
-    'newpost'
+    'newpost',
+    'editpost'
 ];
 
 let entry = {};

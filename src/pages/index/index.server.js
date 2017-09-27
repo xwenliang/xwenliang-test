@@ -42,7 +42,7 @@ export default class Index extends React.Component{
                                 //只显示前4条数据
                                 showListNum="4"
                                 //更多数据的页面地址
-                                getMoreUrl={routers.water}
+                                getMoreUrl={routers.water()}
                                 //发布数据的地址
                                 publishUrl={apis.postWater}
                                 //初始数据

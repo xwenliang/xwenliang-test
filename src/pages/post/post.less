@@ -6,6 +6,7 @@
         position: relative;
         min-height: 200px;
         padding-left: 180px;
+        padding-right: 180px;
         padding-bottom: 50px;
         img{
             max-width: 100%;
@@ -24,7 +25,8 @@
             color: @color-font-sub;
         }
         .c-input textarea{
-            width: 808px;
+            width: 100%;
+            box-sizing: border-box;
         }
     }
     .title{
@@ -91,6 +93,9 @@
         }
         .ace-editor{
             font: 12px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+        }
+        .workplace p{
+            margin-bottom: 20px;
         }
     }
     .status{
